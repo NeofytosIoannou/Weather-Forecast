@@ -1,0 +1,392 @@
+/* Background Image */
+body {
+    background-image: url('sunset.jpg'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Ensures it stays in place */
+    background-attachment: fixed; /* Ensures it stays in place */
+    margin: 0;
+    padding: 0;
+}
+
+/* Form Container */
+.form-container {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+/* Input Fields */
+.form-control, .form-select {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* Labels */
+.form-label {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* Button Group */
+.btn-group {
+    display: flex;
+    flex-wrap: nowrap; /* Prevents buttons from wrapping */
+    gap: 5px; /* Reduces spacing to fit buttons */
+    width: 100%; /* Ensures buttons stay inside the container */
+    overflow: hidden; /* Prevents buttons from overflowing */
+}
+
+/* Buttons */
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem; /* Keep buttons compact */
+    border-radius: 8px;
+    padding: 6px 10px; /* Reduce padding to prevent overflow */
+    white-space: nowrap; /* Prevents text from wrapping */
+    flex-shrink: 0; /* Prevents buttons from shrinking too much */
+}
+
+/* Button Icons */
+.btn i {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+/* Ensure Everything Wraps Correctly */
+.row {
+    flex-wrap: wrap; /* Allows elements to stack properly */
+}
+
+.col-md-2,
+.col-md-3 {
+    white-space: normal; /* Ensures text does not overflow */
+}
+
+/* Hide weather sections initially */
+#weatherResults, #next24hForecast, #forecastCharts, #weatherMap {
+    display: none;
+}
+
+/* Style all result sections */
+/* .bg-light {
+   
+        padding: 15px;
+} */
+
+/* Adjust spacing for elements */
+.mt-4 {
+    margin-top: 1.5rem;
+}
+/* Ensure the map is displayed correctly */
+
+#map {
+    width: 100%;
+    height: 350px;
+    overflow: hidden;
+    flex-grow: 1;
+    min-height: 350px; /* Adjust as needed */
+}
+#rightNow .container {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#weatherResults, #weatherMap {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+
+
+
+#rightNow .container {
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+}
+
+#rightNow .d-flex {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#rightNow #weatherIcon {
+    width: 80px;
+    height: auto;
+}
+
+#rightNow .text-start {
+    margin-left: 10px; /* Pushes the text to the right */
+}
+
+#rightNow h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    display: inline;
+}
+
+#rightNow .temp-unit {
+    font-size: 2rem;
+}
+
+#rightNow p {
+    margin: 5px 0 0;
+}
+
+/* Weather section styling */
+.weather-icon img {
+    width: 60px; 
+    height: auto;
+}
+
+/* Align weather text and adjust spacing */
+.weather-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.weather-info h4 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.weather-info h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.low-temp {
+    color: blue;
+    font-size: 1rem;
+}
+
+.high-temp {
+    color: red;
+    font-size: 1rem;
+}
+
+
+/* On hover, make the icon slightly larger */
+#weatherIcon:hover {
+    transform: scale(1.1); /* Scale the icon by 10% */
+}
+/* Make the weather info and map container stretch to the same height */
+.weather-info {
+    height: 100%;
+}
+
+
+
+
+
+/* Make sure the forecast section width matches the upper tab */
+#forecastChartsSection {
+    max-width: 100%;
+    background: transparent !important;
+    padding: 0 !important;
+
+}
+
+/* Fix chart sizing issues */
+#tempChart, #humidityChart, #pressureChart {
+    min-height: 250px;  /* Prevents charts from being too small */
+    width: 100%;         /* Ensures they fit inside their cards */
+}
+
+/* Ensure cards stretch equally in height */
+.flex-grow-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.shadow{
+    box-shadow: none !important;
+}
+.modal-body img {
+    margin-bottom: 5px;
+}
+.modal-body p {
+    margin-bottom: 0.3rem;
+}
+.me-6 {
+    margin-right: 4rem;
+  }
+.ms-6{
+    margin-left: 5rem;
+
+}
+.ms-7{
+    margin-left: 10rem;
+
+}
+/* Clean tab border */
+/* Tabs container bottom line */
+/* Tabs container bottom border */
+.nav-tabs {
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* INACTIVE tabs */
+.nav-tabs .nav-link {
+    color: #ffffff;                    /* 🔵 White text */
+    background-color: #007bff;         /* 🔵 Bootstrap blue background */
+    border: 1px solid #007bff;;
+    border-bottom: none;
+    border-radius: 0.5rem 0.5rem 0 0;
+    font-weight: 500;
+}
+
+/* ACTIVE tab */
+.nav-tabs .nav-link.active {
+    color: #1a73e8;                    /* 🔹 Text color (blue) */
+    background-color: #ffffff;         /* 🔹 White background */
+    border: 1px solid #ffffff;
+    border-bottom: none;
+    border-radius: 0.5rem 0.5rem 0 0;
+    font-weight: 600;
+}
+.chart-container {
+    width: 100%;
+    max-width: 100%;
+   height: 100%;
+};
+  
+#forecast24hDetails td{
+    
+border-top: 1px solid grey;
+ border-collapse: collapse;
+}
+
+.hr-smooth {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, #ccc, #999, #ccc);
+    margin: 2rem 0;
+    display: none; /* Hide initially */
+  }
+  
+  .fade-line {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.5), transparent);
+  }
+  
+  @media (max-width: 1020px) {
+    .form-col {
+      flex: 0 0 100% !important;
+      max-width: 100% !important;
+    }
+  }
+  @media (max-width: 1236px) and (min-width: 1021px) {
+    
+  
+    .error-message {
+      font-size: 0.79rem !important;
+    }
+  }
+  
+  /* .max-w{
+    max-width: 1550px;
+  } */
+  @media(min-width:1550px){
+    .custom-container{
+        width: 80%;
+    }
+  }
+  /* First media query for screens between 576px and 720px */
+@media (min-width: 576px) and (max-width: 720px) {
+    .responsive-btn {
+      padding: 0.3rem 0.6rem;
+      font-size: 0.6rem;
+    }
+  }
+  
+  /* Second media query for screens smaller than 576px */
+  @media (max-width: 576px) {
+    .responsive-btn {
+      padding: 0.3rem 0.6rem;
+      font-size: 0.4rem;
+    }
+  }
+  
+
+  @media (max-width: 576px) {
+    #forecast24hDetails table {
+      font-size: 0.85rem;
+    }
+  
+    #forecast24hDetails th,
+    #forecast24hDetails td {
+      white-space: nowrap;
+      padding: 0.4rem;
+    }
+  
+    #forecast24hDetails img {
+      width: 30px;
+    }
+  
+    #forecast24hDetails .btn-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+    }
+  }
+  @media (max-width: 576px) {
+    #logModalBody table {
+      font-size: 0.85rem;
+    }
+  
+    #logModalBody th,
+    #logModalBody td {
+      white-space: nowrap;
+      padding: 0.4rem;
+    }
+  }
+
+  #logModalBody {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  modal-body {
+    overflow-y: auto;
+  }
+  @media (min-width: 768px) {
+    .custom-modal-md {
+      max-width: 600px; /* smaller than modal-lg (which is 800px+) */
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .weather-summary {
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+    }
+  
+    .weather-summary > div {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+  
+    .weather-summary img {
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+  
+    .weather-summary p {
+      margin-left: 0 !important;
+    }
+  }
+  
