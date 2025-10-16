@@ -1,12 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-  document.getElementById("logoutBtn").addEventListener("click", function () {
-    // Clear form fields for login and register
-    console.log("Gyl");
-    
-    // Optionally, redirect to a different page (like a login page)
-    window.location.href = "index.html"; // Redirect to the login page, if required
-});
+ 
 
   document.getElementById("searchBtn").addEventListener("click", function () {
       let address = document.getElementById("address");
