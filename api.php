@@ -52,8 +52,7 @@ if ($method === 'POST') {
     );
 
     $timestamp = time();
-    $stmt->bind_param(// 🚫 All other methods are silently ignored — no 405 returned
-        // This is intentional based on your request
+    $stmt->bind_param(
         "sssssi",
         $input['username'],
         $input['address'],
@@ -117,5 +116,10 @@ elseif ($method === 'GET') {
     http_response_code(200);
     echo json_encode(["data" => $data]);
     $conn->close();
+}
+
+else {
+    http_response_code(405);
+    echo json_encode(["error" => "Method not allowed"]);
 }
 

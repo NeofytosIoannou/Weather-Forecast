@@ -261,7 +261,7 @@ body {
     width: 100%;
     max-width: 100%;
    height: 100%;
-};
+}
   
 #forecast24hDetails td{
     
@@ -359,7 +359,7 @@ border-top: 1px solid grey;
     overflow-y: auto;
   }
 
-  modal-body {
+  .modal-body {
     overflow-y: auto;
   }
   @media (min-width: 768px) {

@@ -105,8 +105,19 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.getElementById("clearBtn").addEventListener("click", function () {
-hideResults(); // Calls the function to hide all weather sections
-console.log("Cleared input and hid weather results.");
+const form = document.getElementById("weatherForm");
+if (form) {
+  form.reset();
+}
+
+// Hide validation messages after clearing fields.
+["address-err", "region-err", "city-err"].forEach((id) => {
+  const el = document.getElementById(id);
+  if (el) el.style.color = "transparent";
+});
+
+hideResults();
+console.log("Cleared inputs and hid weather results.");
 });
 let cityName;
 // Function to Fetch Current Weather Data
@@ -178,7 +189,7 @@ fetch(apiUrl)
 
 // Function to Fetch 5-Day Forecast Data
 let cachedForecastData = null; // Store data globally to avoid duplicate API calls
-let cachedUnit = null;
+let cachedForecastKey = null;
 
 async function fetchForecastData(lat, lon, unit) {
   const API_KEY = "707f2174aac1f044357d58a630890e4a";
@@ -298,26 +309,30 @@ resultsSection.style.display = "block";
 let elements = [
   "resultsSection",
   "forecast24hDetails",
-  "chartContainer",
-  "weatherMap",
+  "forecastChartsSection",
+  "map",
 ];
-elements.forEach((id) => {
-  let el = document.getElementById(id);
-  if (el) {
-    el.style.display = "block";
-  } else {
-    console.warn(`Warning: #${id} not found!`);
-  }
-});
+if (elements) {
+  elements.forEach((id) => {
+    let el = document.getElementById(id);
+    if (el) {
+      el.style.display = "block";
+    } else {
+      console.warn(`Warning: #${id} not found!`);
+    }
+  });
+  console.log("Results section displayed successfully.");
 
-console.log("Results section displayed successfully.");
 }
+else {
+alert("Error: Weather Location data is unavailable. Please try again.");
+}}
 
 // Function to Hide Results Sections
 function hideResults() {
 document
   .querySelectorAll(
-    "#weatherResults, #next24hForecast, #forecastCharts, #weatherMap"
+    "#resultsSection, #forecast24hDetails, #forecastChartsSection, #map, #modalsContainer"
   )
   .forEach((el) => {
     if (el) el.style.display = "none"; // Ensures the element exists before modifying style
@@ -327,6 +342,15 @@ let resultsSection = document.getElementById("resultsSection");
 if (resultsSection) resultsSection.style.display = "none";
 
 console.log("Weather results hidden.");
+}
+
+function resizeForecastCharts() {
+  ["tempChart", "humidityChart", "pressureChart"].forEach((id) => {
+    const chartEl = document.getElementById(id);
+    if (chartEl && chartEl.data) {
+      Plotly.Plots.resize(id);
+    }
+  });
 }
 
 // Function to Display Weather Data
@@ -598,9 +622,7 @@ for (let i = 0; i < dates.length; i += 16) { // 8 entries per day × 2 days = 16
   forecastSection.style.display = "block";
 
   setTimeout(() => {
-    Plotly.Plots.resize("tempChart");
-    Plotly.Plots.resize("humidityChart");
-    Plotly.Plots.resize("pressureChart");
+    resizeForecastCharts();
   }, 0);
 
   console.log("5-Day Forecast section displayed successfully.");
@@ -615,9 +637,7 @@ return 220; // was 250
 }
 
 window.addEventListener("resize", () => {
-Plotly.Plots.resize("tempChart");
-Plotly.Plots.resize("humidityChart");
-Plotly.Plots.resize("pressureChart");
+resizeForecastCharts();
 });
 
 
