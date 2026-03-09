@@ -300,13 +300,7 @@ const view = new ol.View({
   zoom: usedFallback ? 9 : 13,
 });
 
-weatherMap = new ol.Map({
-  target: "map",
-  layers: [baseLayer, precipitationLayer, temperatureLayer],
-  view: view,
-});
-
-// Zoom to the exact location bounds if Nominatim provides a bounding box.
+let targetExtent = null;
 if (Array.isArray(boundingbox) && boundingbox.length === 4) {
   const south = parseFloat(boundingbox[0]);
   const north = parseFloat(boundingbox[1]);
@@ -319,23 +313,39 @@ if (Array.isArray(boundingbox) && boundingbox.length === 4) {
     Number.isFinite(west) &&
     Number.isFinite(east)
   ) {
-    const extent = ol.proj.transformExtent(
+    targetExtent = ol.proj.transformExtent(
       [west, south, east, north],
       "EPSG:4326",
       "EPSG:3857"
     );
-
-    view.fit(extent, {
-      padding: [20, 20, 20, 20],
-      duration: 400,
-      maxZoom: usedFallback ? 11 : 16,
-    });
   }
 }
+
+const applyMapView = () => {
+  if (targetExtent) {
+    view.fit(targetExtent, {
+      padding: [20, 20, 20, 20],
+      duration: 300,
+      maxZoom: usedFallback ? 11 : 16,
+    });
+  } else {
+    view.setCenter(ol.proj.fromLonLat([lon, lat]));
+    view.setZoom(usedFallback ? 9 : 13);
+  }
+};
+
+weatherMap = new ol.Map({
+  target: "map",
+  layers: [baseLayer, precipitationLayer, temperatureLayer],
+  view: view,
+});
+
+applyMapView();
 
 // Delay map update size slightly to ensure it's visible
 setTimeout(() => {
   weatherMap.updateSize();
+  applyMapView();
 }, 300);
 
 console.log("Weather map successfully updated.");
