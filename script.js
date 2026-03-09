@@ -110,6 +110,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       fetchWeatherData(lat, lon, unit);
       fetchForecastData(lat, lon, unit);
+
+      // Ensure map container is visible before map initialization.
+      showResults();
       displayWeatherMap(lat, lon, locationData[0].boundingbox, usedFallback);
     })
     .catch((err) => {
@@ -335,12 +338,17 @@ const applyMapView = () => {
 };
 
 weatherMap = new ol.Map({
-  target: "map",
+  target: mapContainer,
   layers: [baseLayer, precipitationLayer, temperatureLayer],
   view: view,
 });
 
 applyMapView();
+
+weatherMap.once("rendercomplete", () => {
+  weatherMap.updateSize();
+  applyMapView();
+});
 
 // Delay map update size slightly to ensure it's visible
 setTimeout(() => {
