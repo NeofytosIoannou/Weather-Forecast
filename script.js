@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       fetchWeatherData(lat, lon, unit);
       fetchForecastData(lat, lon, unit);
-      displayWeatherMap(lat, lon);
+      displayWeatherMap(lat, lon, locationData[0].boundingbox, usedFallback);
     })
     .catch((err) => {
       console.error("❌ Location fetch error:", err);
@@ -255,7 +255,7 @@ async function fetchForecastData(lat, lon, unit) {
 // Function to Display Weather Map
 let weatherMap = null; // Store the map globally
 
-function displayWeatherMap(lat, lon) {
+function displayWeatherMap(lat, lon, boundingbox = null, usedFallback = false) {
 console.log("Initializing Weather Map at:", lat, lon);
 
 let mapContainer = document.getElementById("map");
@@ -295,14 +295,43 @@ const temperatureLayer = new ol.layer.Tile({
 });
 
 // Create the map
+const view = new ol.View({
+  center: ol.proj.fromLonLat([lon, lat]),
+  zoom: usedFallback ? 9 : 13,
+});
+
 weatherMap = new ol.Map({
   target: "map",
   layers: [baseLayer, precipitationLayer, temperatureLayer],
-  view: new ol.View({
-    center: ol.proj.fromLonLat([lon, lat]),
-    zoom: 5,
-  }),
+  view: view,
 });
+
+// Zoom to the exact location bounds if Nominatim provides a bounding box.
+if (Array.isArray(boundingbox) && boundingbox.length === 4) {
+  const south = parseFloat(boundingbox[0]);
+  const north = parseFloat(boundingbox[1]);
+  const west = parseFloat(boundingbox[2]);
+  const east = parseFloat(boundingbox[3]);
+
+  if (
+    Number.isFinite(south) &&
+    Number.isFinite(north) &&
+    Number.isFinite(west) &&
+    Number.isFinite(east)
+  ) {
+    const extent = ol.proj.transformExtent(
+      [west, south, east, north],
+      "EPSG:4326",
+      "EPSG:3857"
+    );
+
+    view.fit(extent, {
+      padding: [20, 20, 20, 20],
+      duration: 400,
+      maxZoom: usedFallback ? 11 : 16,
+    });
+  }
+}
 
 // Delay map update size slightly to ensure it's visible
 setTimeout(() => {
