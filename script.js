@@ -57,25 +57,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
   
 
-  // 🌍 Nominatim Search API
-  const query = `${address.value}, ${region.value}, ${city.value}`;
-  const apiUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-    query
-  )}&format=json&addressdetails=1`;
+  // 🌍 Nominatim Search API with simple fallback to broader location.
+  const fullQuery = `${address.value}, ${region.value}, ${city.value}`;
+  const fallbackQuery = `${city.value}, ${region.value}, ${country}`;
+  let usedFallback = false;
 
-  fetch(apiUrl)
-    .then((res) => res.json())
+  const fetchLocation = (query) => {
+    const apiUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+      query
+    )}&format=json&addressdetails=1`;
+    return fetch(apiUrl).then((res) => res.json());
+  };
+
+  fetchLocation(fullQuery)
+    .then((locationData) => {
+      if (locationData.length > 0) {
+        return locationData;
+      }
+
+      console.log("No exact address match. Trying broader region search...");
+      usedFallback = true;
+      return fetchLocation(fallbackQuery);
+    })
     .then((locationData) => {
       if (locationData.length === 0) {
-        alert("No result for that location.");
+        alert("No result found for that address or region.");
         return;
       }
 
       const lat = parseFloat(locationData[0].lat);
       const lon = parseFloat(locationData[0].lon);
 
+      if (usedFallback) {
+        alert("Address not found. Showing weather for the selected region/city.");
+      }
+
       console.log(`📍 Latitude: ${lat}, Longitude: ${lon}`);
-      
+
       // 🌐 Send POST to your backend
       fetch("api.php", {
         method: "POST",
@@ -89,7 +107,6 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch((err) => {
           console.error("❌ POST error:", err);
         });
-
 
       fetchWeatherData(lat, lon, unit);
       fetchForecastData(lat, lon, unit);
