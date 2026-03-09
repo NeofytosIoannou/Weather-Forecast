@@ -324,37 +324,41 @@ if (Array.isArray(boundingbox) && boundingbox.length === 4) {
   }
 }
 
-const applyMapView = () => {
-  if (targetExtent) {
-    view.fit(targetExtent, {
-      padding: [20, 20, 20, 20],
-      duration: 300,
-      maxZoom: usedFallback ? 11 : 16,
-    });
-  } else {
-    view.setCenter(ol.proj.fromLonLat([lon, lat]));
-    view.setZoom(usedFallback ? 9 : 13);
-  }
-};
-
 weatherMap = new ol.Map({
   target: mapContainer,
   layers: [baseLayer, precipitationLayer, temperatureLayer],
   view: view,
 });
 
-applyMapView();
+// Force browser reflow so the container has real dimensions.
+mapContainer.offsetHeight;
 
-weatherMap.once("rendercomplete", () => {
+const zoomToLocation = () => {
   weatherMap.updateSize();
-  applyMapView();
-});
+  const size = weatherMap.getSize();
+  if (!size || size[0] === 0 || size[1] === 0) return false;
 
-// Delay map update size slightly to ensure it's visible
-setTimeout(() => {
-  weatherMap.updateSize();
-  applyMapView();
-}, 300);
+  if (targetExtent) {
+    view.fit(targetExtent, {
+      size: size,
+      padding: [20, 20, 20, 20],
+      maxZoom: usedFallback ? 11 : 16,
+    });
+  } else {
+    view.setCenter(ol.proj.fromLonLat([lon, lat]));
+    view.setZoom(usedFallback ? 9 : 13);
+  }
+  return true;
+};
+
+// Try immediately, then retry at increasing intervals until it works.
+if (!zoomToLocation()) {
+  setTimeout(() => {
+    if (!zoomToLocation()) {
+      setTimeout(zoomToLocation, 500);
+    }
+  }, 100);
+}
 
 console.log("Weather map successfully updated.");
 }
